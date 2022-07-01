@@ -1,0 +1,112 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.container {
+  color: #c9ccea;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #1f7c62;
+}
+
+.container h1 {
+  font-size: 2.6rem;
+  margin-bottom: 0.2rem;
+}
+.hide {
+  display: none;
+}
+
+.container .labels {
+  list-style: none;
+  display: flex;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.3rem;
+  background-color: rgb(23, 35, 34);
+  border-radius: 1.5rem;
+}
+
+.active-label {
+  color: #fff;
+  background-color: #1f7c62;
+}
+
+.timer-container {
+  display: flex;
+  flex: 2;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 15rem;
+  width: 15rem;
+  border-radius: 7.5rem;
+  color: #fff;
+  background: rgb(23, 35, 34);
+  font-size: 3.5rem;
+  box-shadow: 1rem 1.5rem 2rem rgba(0, 0, 0, 0.6);
+}
+
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+button {
+  color: rgb(51, 51, 51);
+  font-size: 0.8rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 3rem;
+  margin: 0.2rem;
+  background: #fff;
+  min-width: 80px;
+  cursor: pointer;
+}
+.settings {
+  background-color: rgb(23, 35, 34);
+  color: #fff;
+}
+.button-wrapper button.active {
+  color: rgb(51, 51, 51);
+  background-color: #fff;
+  /* border: 1px solid #0c0e1b; */
+}
+.form-container {
+  text-align: center;
+}
+.input-wrapper {
+  margin: 1.5rem;
+}
+.input-wrapper input {
+  height: 30px;
+  width: 30px;
+  padding: 2rem;
+  background-color: rgb(23, 35, 34);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+  text-align: center;
+  font-size: 14pt;
+}
