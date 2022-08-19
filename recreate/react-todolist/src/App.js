@@ -30,6 +30,10 @@ const App = () => {
     setDictionary((prevState) => ({ ...prevState, [name]: value }));
   };
   const handleCheckboxes = (e) => {
+    setCheckBoxes({
+      ...checkBoxes,
+      [e.target.name]: e.target.checked,
+    });
     const locale = JSON.parse(localStorage.getItem("todo"));
     locale.forEach((data) => {
       if (data.todo === e.target.name) {
@@ -38,17 +42,13 @@ const App = () => {
       }
     });
     // console.log(JSON.parse(localStorage.getItem("todo")));
-    setCheckBoxes({
-      ...checkBoxes,
-      [e.target.name]: e.target.checked,
-    });
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     const locale = JSON.parse(localStorage.getItem("todo"));
     locale
-      ? setTodoList(() => [...locale, dictionary])
-      : setTodoList(() => [dictionary]);
+      ? setTodoList(() => ({ ...locale, [dictionary.todo]: dictionary }))
+      : setTodoList(() => ({ [dictionary.todo]: dictionary }));
     setDictionary({ todo: "", category: "All", checked: false });
   };
 
@@ -60,14 +60,7 @@ const App = () => {
     const { name, value } = event.target;
     setFilterSearch((prevState) => ({ ...prevState, [name]: value }));
   };
-
-  useEffect(() => {
-    window.addEventListener("storage", () => {
-      setTodoList(JSON.parse(localStorage.getItem("todo")) || []);
-    });
-  }, []);
-
-  const filteredTodo = todoList
+  const filteredTodo = Object.values(todoList)
     .filter((val) =>
       filterSearch.category === "All"
         ? val.todo.includes(filterSearch.search)
@@ -83,7 +76,7 @@ const App = () => {
       </header>
       <SearchForm changeHandler={searchHandler} filterSearch={filterSearch} />
       <Todos
-        filteredTodos={filteredTodo.length ? filteredTodo : todoList}
+        filteredTodos={filteredTodo}
         handleCheckboxes={handleCheckboxes}
         checkBoxes={checkBoxes}
       />
