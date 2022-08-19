@@ -1,8 +1,13 @@
 import React from "react";
-
-export const Todos = ({ filteredTodos, handleCheckboxes, checkBoxes }) => {
+import { AiFillDelete } from "react-icons/ai";
+export const Todos = ({
+  filteredTodos,
+  handleCheckboxes,
+  checkBoxes,
+  handleDelete,
+}) => {
   // const [checkAll, setCheckAll] = useState(false);
-
+  // console.log(filteredTodos);
   return (
     <div style={{ minHeight: "60vh" }}>
       {/* <form>
@@ -16,7 +21,7 @@ export const Todos = ({ filteredTodos, handleCheckboxes, checkBoxes }) => {
       </form> */}
       {Object.values(filteredTodos).map((list, i) => {
         return (
-          <div key={i}>
+          <div key={i} className={list.checked ? "strike" : ""}>
             <input
               type="checkbox"
               name={list.todo}
@@ -26,6 +31,7 @@ export const Todos = ({ filteredTodos, handleCheckboxes, checkBoxes }) => {
             <label htmlFor={list.todo}>
               {list.todo} : {list.category}
             </label>
+            <AiFillDelete onClick={() => handleDelete(list.todo)} />
           </div>
         );
       })}
