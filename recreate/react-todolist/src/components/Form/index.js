@@ -10,6 +10,7 @@ export const Form = ({ dictionary, formHandler, handleSubmit }) => (
           placeholder="Input new todo"
           onChange={formHandler}
           value={dictionary.todo}
+          className="inputboxtwo"
         />
       </label>
       <select

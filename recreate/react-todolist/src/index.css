@@ -1,9 +1,41 @@
+* {
+  box-sizing: border-box;
+}
 .container {
-  width: 60vw;
+  width: 50vw;
   height: 100vh;
   margin: auto;
   text-align: center;
 }
 .strike {
   text-decoration: line-through;
+}
+.inputbox,
+.inputboxtwo {
+  width: 70%;
+  display: relative;
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 20px;
+  border-color: #24a69a;
+}
+.inputboxtwo {
+  width: 45%;
+}
+select {
+  color: #24a69a;
+  padding: 5px;
+  border-radius: 5px;
+  border-color: #24a69a;
+  margin-right: 10px;
+  width: 17%;
+}
+button {
+  padding: 10px;
+  border-radius: 7px;
+  width: 15%;
+  border: none;
+  color: #fff;
+  background-color: #24a69a;
 }

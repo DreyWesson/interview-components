@@ -21,17 +21,28 @@ export const Todos = ({
       </form> */}
       {Object.values(filteredTodos).map((list, i) => {
         return (
-          <div key={i} className={list.checked ? "strike" : ""}>
+          <div
+            key={i}
+            className={list.checked ? "strike" : ""}
+            style={{ display: "flex" }}
+          >
             <input
               type="checkbox"
               name={list.todo}
               checked={checkBoxes[list.todo] || false || list.checked}
               onChange={handleCheckboxes}
             />
-            <label htmlFor={list.todo}>
-              {list.todo} : {list.category}
+            <label
+              htmlFor={list.todo}
+              style={{ flex: 1, textAlign: "start", marginLeft: "20px" }}
+            >
+              <span>{list.category}</span> : <span>{list.todo}</span>
             </label>
-            <AiFillDelete onClick={() => handleDelete(list.todo)} />
+            <AiFillDelete
+              size={20}
+              color={"grey"}
+              onClick={() => handleDelete(list.todo)}
+            />
           </div>
         );
       })}
