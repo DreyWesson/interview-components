@@ -10,5 +10,5 @@ export const usePageSwitcher = () => {
     setId(id);
     setPage(true);
   };
-  return { page, setPage, pageHandler, handleNoteDisplay, id };
+  return { page, pageHandler, handleNoteDisplay, id };
 };

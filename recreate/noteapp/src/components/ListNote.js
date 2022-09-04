@@ -4,7 +4,6 @@ import { useData } from "../useData";
 
 export const ListNote = ({ lists, pageHandler, page, handleNoteDisplay }) => {
   const { handleDelete } = useData();
-
   return (
     <div
       style={{

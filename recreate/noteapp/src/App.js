@@ -2,21 +2,9 @@ import React from "react";
 import { Form } from "./components/Form";
 import { ListNote } from "./components/ListNote";
 import { OpenNote } from "./components/OpenNote";
-
 import { useData } from "./useData";
 import { usePageSwitcher } from "./usePageSwitcher";
 
-// TODO:
-// Form ✅
-// formData
-//  =>  CREATE ✅
-//  =>  UPDATE
-//  =>  DELETE ✅
-//  =>  FILTER
-// form validation
-// Localstorage as DB
-// Sidebar display✅
-// main page => form ✅ || last note ✅ || clicked note✅
 const App = () => {
   const { data, handleSubmit } = useData();
   const { page, pageHandler, id, handleNoteDisplay } = usePageSwitcher();
