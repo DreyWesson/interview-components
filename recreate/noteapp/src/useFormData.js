@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import timestamp from "time-stamp";
-import { v4 as uuid } from "uuid";
+import { useState } from "react";
+
 export const struct = {
   id: "",
   title: "",
@@ -15,12 +14,8 @@ export const useFormData = () => {
     setFormData((prevState) => ({
       ...prevState,
       [target.name]: target.value,
-      id: uuid(),
-      createdAt: timestamp("YYYY/MM/DD"),
     }));
   };
-  useEffect(() => {
-    setFormData(formData);
-  }, [formData]);
+
   return { formData, setFormData, handleChange };
 };

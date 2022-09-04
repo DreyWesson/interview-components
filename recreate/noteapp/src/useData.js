@@ -7,23 +7,15 @@ export const useData = () => {
   const [{ notes }, dispatch] = useStateValue();
 
   const handleSubmit = (formData) => {
-    dispatch({
-      type: actionTypes.ADD_NOTE,
-      note: formData,
-    });
+    dispatch({ type: actionTypes.ADD_NOTE, note: formData });
   };
 
   const handleDelete = (id) => {
-    dispatch({
-      type: actionTypes.DELETE_NOTE,
-      id,
-    });
+    dispatch({ type: actionTypes.DELETE_NOTE, id });
   };
 
   useEffect(() => {
-    dispatch({
-      type: actionTypes.SET_NOTES,
-    });
+    dispatch({ type: actionTypes.SET_NOTES });
   }, [dispatch]);
 
   useEffect(() => {
