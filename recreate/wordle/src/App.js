@@ -15,13 +15,9 @@ const App = () => {
     const handleSubmit = () => {
       // if (state?.words.includes(state.guesses[state.currentGuess])) {
       dispatch({ type: actionTypes.SET_WINNER });
-      dispatch({
-        type: actionTypes.INCREMENT,
-      });
+      dispatch({ type: actionTypes.INCREMENT });
       dispatch({ type: actionTypes.SET_LOSER });
       dispatch({ type: actionTypes.ALL_GUESSES });
-      dispatch({ type: actionTypes.EXACT_GUESSES });
-      dispatch({ type: actionTypes.IN_EXACT_GUESSES });
       // }
     };
     const handleKeyUp = (e) => {
@@ -43,7 +39,7 @@ const App = () => {
         // dispatch new state changes here
       }
     };
-    dispatch({ type: actionTypes.SET_GAME });
+    dispatch({ type: actionTypes.SET_GAME, action: "set" });
     window.addEventListener("keyup", handleKeyUp);
     return () => window.removeEventListener("keyup", handleKeyUp);
   }, [
@@ -96,7 +92,9 @@ const App = () => {
               marginBottom: "20px",
               boxShadow: "rgb(0 0 0 / 75%) 2px 3px 8px 0px",
             }}
-            onClick={() => dispatch({ type: actionTypes.RESET_GAME })}
+            onClick={() =>
+              dispatch({ type: actionTypes.SET_GAME, action: "reset" })
+            }
           >
             Play Again
           </button>
