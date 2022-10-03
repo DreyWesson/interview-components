@@ -3,6 +3,7 @@ const obj = () => ({
   words,
   word: words[(Math.random() * words.length) | 0],
   guesses: new Array(6).fill(""),
+  row: new Array(5).fill(""),
   currentGuess: 0,
   winner: false,
   loser: false,

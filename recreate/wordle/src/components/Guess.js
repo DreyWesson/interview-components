@@ -2,12 +2,12 @@ import React from "react";
 import { useStateValue } from "../StateProvider";
 
 export const Guess = ({ current }) => {
-  const [{ word, guesses, currentGuess }] = useStateValue();
+  const [{ word, guesses, currentGuess, row }] = useStateValue();
   return (
     <table style={{ borderSpacing: "10px", margin: "0 auto" }}>
       <tbody>
         <tr>
-          {new Array(5).fill("").map((element, i) => {
+          {row.map((element, i) => {
             const setBg =
               current < currentGuess
                 ? "red"

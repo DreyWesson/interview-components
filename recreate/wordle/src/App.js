@@ -5,8 +5,12 @@ import { useStateValue } from "./StateProvider";
 import { useData } from "./useData";
 
 const App = () => {
-  const [{ guesses, word, currentGuess, winner, loser }] = useStateValue();
+  const [{ guesses, winner, loser }] = useStateValue();
   const { handleReset } = useData();
+
+  // TODO
+  // create 6 rows of 5 cells
+  //
 
   return (
     <div
@@ -21,17 +25,9 @@ const App = () => {
     >
       <div className="" style={{ textAlign: "center" }}>
         <h1>Wordle</h1>
-        {guesses.map((el, i) => {
-          return (
-            <Guess
-              word={word}
-              guess={guesses[i]}
-              isGuessed={i < currentGuess}
-              current={i}
-              key={i}
-            />
-          );
-        })}
+        {guesses.map((el, i) => (
+          <Guess current={i} key={i} />
+        ))}
 
         {winner && <h1>You won!!</h1>}
         {loser && <h1>You lost!!</h1>}
