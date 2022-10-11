@@ -1,0 +1,25 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+label {
+    margin: 10px 0;
+}
+input,
+select {
+    padding: 7px;
+    border: none;
+}
+input,
+textarea {
+    background-color: #0a0a23;
+    border: 1px solid #0a0a23;
+    color: #fff;
+}
+
+hr {
+    margin: 2rem 0;
+}
+button {
+    margin: 20px auto;
+}
