@@ -13,13 +13,18 @@ h1 {
 ul {
     display: flex;
     flex-wrap: wrap;
+    background-color: black;
     /* gap: 7px; */
 }
 li {
     height: 40vh;
     flex-grow: 1;
 }
-li:last-child {
+/* li:last-child {
+    flex-grow: 10;
+} */
+li::after {
+    content: "";
     flex-grow: 10;
 }
 img {

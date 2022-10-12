@@ -3,7 +3,19 @@ import "./App.css";
 function App() {
     return (
         <div className="App">
-            <h1>Photo Gallery</h1>
+            <h1>
+                <span style={{ color: "#FF0000" }}>P</span>
+                <span style={{ color: "#66CC66" }}>h</span>
+                <span style={{ color: "#FF9966" }}>o</span>
+                <span style={{ color: "#FFCCCC" }}>t</span>
+                <span style={{ color: "#FF0066" }}>o </span>
+                Gallery
+            </h1>
+            <p>
+                <a href="https://css-tricks.com/adaptive-photo-layout-with-flexbox/">
+                    Details
+                </a>
+            </p>
             <ul>
                 <li>
                     <img
@@ -279,7 +291,7 @@ function App() {
                     />
                 </li>
                 {/* Adding an empty <li> here so the final photo doesn't stretch like crazy. Try removing it and see what happens! */}
-                <li></li>
+                {/* <li></li> */}
             </ul>
         </div>
     );
