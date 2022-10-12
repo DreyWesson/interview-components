@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { MultiCheckboxes } from "./MultiCheckboxes";
 const data = ["Cheese", "Bugger", "Pizza"];
 
 export const Form = () => {
     const [checkedValues, setCheckedValues] = useState(
-        new Array(3).fill(false)
+        new Array(data.length).fill(false)
     );
     const [formData, setFormData] = useState({
         fname: "",
@@ -26,19 +26,25 @@ export const Form = () => {
     };
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        if (name === "checkboxes") return;
+        if (name === "checkbox") return;
         setFormData((prev) => ({
             ...prev,
             [name.toLowerCase()]: name !== "Choose file" ? value : files[0],
         }));
     };
-    console.log(formData);
 
-    useEffect(() => {
+    const db = useMemo(() => {
         const newVal = [];
         checkedValues.forEach((val, i) => val && newVal.push(data[i]));
         setFormData((prev) => ({ ...prev, checkboxes: newVal }));
     }, [checkedValues]);
+
+    // useEffect(() => {
+    //     console.log(formData);
+    //     const newVal = [];
+    //     checkedValues.forEach((val, i) => val && newVal.push(data[i]));
+    //     setFormData((prev) => ({ ...prev, checkboxes: newVal }));
+    // }, [checkedValues]);
 
     return (
         <div
