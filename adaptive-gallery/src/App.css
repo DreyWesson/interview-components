@@ -20,13 +20,13 @@ li {
     height: 40vh;
     flex-grow: 1;
 }
-/* li:last-child {
-    flex-grow: 10;
-} */
-li::after {
-    content: "";
+li:last-child {
     flex-grow: 10;
 }
+/* li::after {
+    content: "";
+    flex-grow: 10;
+} */
 img {
     min-width: 100%;
     max-height: 100%;
