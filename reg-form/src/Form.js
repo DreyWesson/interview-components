@@ -63,7 +63,17 @@ export const Form = () => {
             <form
                 action=""
                 style={{ marginTop: "50px" }}
-                onChange={handleChange}
+                // onChange={handleChange}
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    let formData = new FormData(e.target);
+                    // console.log(formData.getAll("checkbox"));
+                    formData = {
+                        ...Object.fromEntries(formData),
+                        checkbox: formData.getAll("checkbox"),
+                    };
+                    console.log(formData);
+                }}
             >
                 <div
                     style={{

@@ -14,8 +14,8 @@ export const MultiCheckboxes = ({ data, checkedValues, handleCheckboxes }) => (
                     name="checkbox"
                     value={val}
                     style={{ marginRight: "10px" }}
-                    checked={checkedValues[i]}
-                    onChange={() => handleCheckboxes(i)}
+                    // checked={checkedValues[i]}
+                    // onChange={() => handleCheckboxes(i)}
                 />
                 <label htmlFor={val}>{val}</label>
             </div>

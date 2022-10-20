@@ -9,26 +9,21 @@ export const useLazy = () => {
         function lazyLoad(ref) {
             if (lazyLoadThrottleTimeout) clearTimeout(lazyLoadThrottleTimeout);
             lazyLoadThrottleTimeout = setTimeout(function () {
-                if (Array.isArray(ref)) {
-                    imgRef.current.forEach(
-                        (img) =>
-                            "IntersectionObserver" in window &&
-                            elementInViewport2(img)
-                    );
-                } else {
-                    "IntersectionObserver" in window && elementInViewport2(ref);
-                }
+                Array.isArray(ref)
+                    ? ref.forEach(
+                          (img) =>
+                              "IntersectionObserver" in window &&
+                              elementInViewport2(img)
+                      )
+                    : "IntersectionObserver" in window &&
+                      elementInViewport2(ref);
 
                 if (imgRef.current.length === 0) {
-                    document.removeEventListener("scroll", () =>
-                        lazyLoad(imgRef.current)
-                    );
-                    window.removeEventListener("resize", () =>
-                        lazyLoad(imgRef.current)
-                    );
+                    document.removeEventListener("scroll", () => lazyLoad(ref));
+                    window.removeEventListener("resize", () => lazyLoad(ref));
                     window.removeEventListener(
                         "orientationChange",
-                        lazyLoad(imgRef.current)
+                        lazyLoad(ref)
                     );
                 }
             }, 20);

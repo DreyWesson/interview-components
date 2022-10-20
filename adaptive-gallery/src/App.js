@@ -25,9 +25,8 @@ function App() {
             </p>
             <ul>
                 {imgData.map((val, i) => (
-                    <li>
+                    <li key={val.alt}>
                         <img
-                            key={i}
                             ref={(element) =>
                                 i > initImageLoad &&
                                 imgRef.current.push(element)
