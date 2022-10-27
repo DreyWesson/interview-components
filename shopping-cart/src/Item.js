@@ -11,6 +11,12 @@ export const Item = () => {
     const [empty, setEmpty] = useState(false);
     const [tmp, setTmp] = useState(dataList);
 
+    useEffect(() => {
+        setSum(() => JSON.parse(localStorage.getItem("total")));
+        setTmp(() => dataList);
+        if (empty) setList(() => []);
+    }, [empty]);
+
     const handleLogic = useCallback((price, quantity, i) => {
         const itemTotal = price * quantity;
         let val = i === 0 ? 0 : JSON.parse(localStorage.getItem("total"));
@@ -19,14 +25,6 @@ export const Item = () => {
         return itemTotal;
     }, []);
 
-    // TODO
-    useEffect(() => {
-        setSum(() => JSON.parse(localStorage.getItem("total")));
-        // localStorage.setItem("tmp", list);
-
-        if (empty) setList(() => []);
-    }, [empty]);
-
     const removeItemHandler = (i) =>
         setList((current) => {
             const update = structuredClone(current);
@@ -34,6 +32,7 @@ export const Item = () => {
                 JSON.parse(localStorage.getItem("total")) -
                 update[i].quantity * update[i].price
             ).toFixed(2);
+
             setSum(() => newTotal);
             localStorage.setItem("total", JSON.stringify(newTotal));
             for (let j = i; j < update.length; j++) {
@@ -42,7 +41,7 @@ export const Item = () => {
             update.length = update.length - 1;
             return update;
         });
-    const handleMinusAdd = (type, i, name, newVal) => {
+    const handleMinusAdd = (type, i) => {
         setList((current) => {
             const update = structuredClone(current);
             type === "minus"
@@ -52,15 +51,21 @@ export const Item = () => {
         });
     };
 
-    const tmpHandler = (name, newSum) =>
-        setTmp((prev) => ({
-            ...prev,
-            [name]: newSum,
-        }));
-    const handleSafe = (dataList) => {
-        localStorage.setItem("tmp", dataList);
+    const handleSave = () => {
+        setList(() => list);
+        setTmp(() => list);
+        setSum(() => JSON.parse(localStorage.getItem("total")));
     };
-    console.log(tmp);
+
+    const inputHandler = (event, i) => {
+        const newVal = +event.target.value;
+        setList((current) => {
+            const update = structuredClone(current);
+            update[i].quantity = newVal;
+            return update;
+        });
+    };
+
     return (
         <div>
             <div>
@@ -113,18 +118,7 @@ export const Item = () => {
                                     type="number"
                                     name={name}
                                     value={list[i].quantity}
-                                    onChange={(e) => {
-                                        e.preventDefault();
-                                        const newVal = +e.target.value;
-                                        const newSum = newVal * list[i].price;
-                                        setList((current) => {
-                                            const update =
-                                                structuredClone(current);
-                                            update[i].quantity = newVal;
-                                            return update;
-                                        });
-                                        tmpHandler(name, newSum);
-                                    }}
+                                    onChange={(e) => inputHandler(e, i)}
                                 />
                                 <div>
                                     <button
@@ -141,10 +135,11 @@ export const Item = () => {
                                     </button>
                                 </div>
                                 <div>
-                                    <button onClick={() => {}}>Save</button>
+                                    <button onClick={handleSave}>Save</button>
                                     <button
                                         onClick={() => {
                                             setEdit(!edit);
+                                            setList(() => tmp);
                                         }}
                                     >
                                         Cancel
