@@ -1,45 +1,69 @@
-import React, { useCallback, useEffect, useState } from "react";
-const dataList = [
-    { name: "Egg", quantity: 1, price: 2.99 },
-    { name: "Milk", quantity: 2, price: 3.98 },
-    { name: "Cheese", quantity: 3, price: 3.99 },
-];
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+// const dataList = ;
 export const Item = () => {
+    const defaultVal = useMemo(() => ({ priceTotal: 0, quantityTotal: 0 }), []);
+    const dataList = useMemo(
+        () => [
+            { name: "Egg", quantity: 1, price: 2.99 },
+            { name: "Milk", quantity: 2, price: 3.98 },
+            { name: "Cheese", quantity: 3, price: 3.99 },
+        ],
+        []
+    );
     const [edit, setEdit] = useState(false);
     const [list, setList] = useState(dataList);
-    const [sum, setSum] = useState(0);
     const [empty, setEmpty] = useState(false);
     const [tmp, setTmp] = useState(dataList);
-    const [allItemNum, setAllItemNum] = useState(0);
+    const [allTotal, setAllTotal] = useState(defaultVal);
 
     useEffect(() => {
-        setSum(() => JSON.parse(localStorage.getItem("total")).val);
+        setAllTotal(() => JSON.parse(localStorage.getItem("total")));
         setTmp(() => dataList);
-        if (empty) setList(() => []);
-    }, [empty]);
+        if (empty) {
+            setList(() => []);
+            setAllTotal(() => defaultVal);
+            localStorage.setItem("total", JSON.stringify(defaultVal));
+        }
+    }, [empty, defaultVal, dataList]);
 
     const handleLogic = useCallback((price, quantity, i) => {
         const itemTotal = price * quantity;
-        let val = i === 0 ? 0 : JSON.parse(localStorage.getItem("total")).val;
-        val += itemTotal;
-        localStorage.setItem("total", JSON.stringify({ val }));
+        const { priceTotal, quantityTotal } = JSON.parse(
+            localStorage.getItem("total")
+        );
+
+        let newVal = i === 0 ? 0 : priceTotal;
+        let newItemNum = i === 0 ? 0 : quantityTotal;
+        newVal += itemTotal;
+        newItemNum += quantity;
+        localStorage.setItem(
+            "total",
+            JSON.stringify({ priceTotal: newVal, quantityTotal: newItemNum })
+        );
         return itemTotal;
     }, []);
 
     const removeItemHandler = (i) =>
         setList((current) => {
             const update = structuredClone(current);
-            const { val } = JSON.parse(localStorage.getItem("total"));
+            const { priceTotal, quantityTotal } = JSON.parse(
+                localStorage.getItem("total")
+            );
             const newTotal = +(
-                val -
+                priceTotal -
                 update[i].quantity * update[i].price
             ).toFixed(2);
+            const newQuantity = +(quantityTotal - update[i].quantity).toFixed(
+                2
+            );
 
-            setSum(() => newTotal);
-            localStorage.setItem("total", JSON.stringify({ val: newTotal }));
-            for (let j = i; j < update.length; j++) {
-                update[j] = update[j + 1];
-            }
+            const newSums = {
+                priceTotal: newTotal,
+                quantityTotal: newQuantity,
+            };
+            setAllTotal(() => newSums);
+            localStorage.setItem("total", JSON.stringify(newSums));
+            for (let j = i; j < update.length; j++) update[j] = update[j + 1];
             update.length = update.length - 1;
             return update;
         });
@@ -57,7 +81,7 @@ export const Item = () => {
     const handleSave = () => {
         setList(() => list);
         setTmp(() => list);
-        setSum(() => JSON.parse(localStorage.getItem("total")).val);
+        setAllTotal(() => JSON.parse(localStorage.getItem("total")));
     };
 
     const inputHandler = (event, i) => {
@@ -75,12 +99,13 @@ export const Item = () => {
                 <h1>Shopping Cart</h1>
                 <p>
                     <span>Number of items: </span>
-                    <span>6</span>
+                    <span>{allTotal.quantityTotal}</span>
                 </p>
                 <p>
-                    <span>Total: </span> <span>{sum.toFixed(2)}</span>
+                    <span>Total: </span>{" "}
+                    <span>${allTotal.priceTotal.toFixed(2)}</span>
                 </p>
-                <button onClick={() => setEmpty(true)}>
+                <button onClick={() => setEmpty(true)} disabled={empty}>
                     Clear shopping cart
                 </button>
             </div>
