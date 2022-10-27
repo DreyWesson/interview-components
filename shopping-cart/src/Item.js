@@ -97,13 +97,22 @@ export const Item = () => {
         <div>
             <div>
                 <h1>Shopping Cart</h1>
+                <span>
+                    <a href="https://fedosejev.github.io/react-shopping-cart/">
+                        Sample Link
+                    </a>
+                </span>
                 <p>
                     <span>Number of items: </span>
-                    <span>{allTotal.quantityTotal}</span>
+                    <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                        {allTotal.quantityTotal}
+                    </span>
                 </p>
                 <p>
                     <span>Total: </span>{" "}
-                    <span>${allTotal.priceTotal.toFixed(2)}</span>
+                    <span style={{ fontWeight: "bold", fontSize: "20px" }}>
+                        ${allTotal.priceTotal.toFixed(2)}
+                    </span>
                 </p>
                 <button onClick={() => setEmpty(true)} disabled={empty}>
                     Clear shopping cart
@@ -117,7 +126,12 @@ export const Item = () => {
                         <h1>{name}</h1>
                         <p>
                             <span>{quantity}</span> x <span>${price} </span>=
-                            <span> ${itemTotal.toFixed(2)}</span>
+                            <span
+                                style={{ fontWeight: "bold", fontSize: "20px" }}
+                            >
+                                {" "}
+                                ${itemTotal.toFixed(2)}
+                            </span>
                         </p>
                         {!edit ? (
                             <div
@@ -158,6 +172,7 @@ export const Item = () => {
                                         onClick={() =>
                                             handleMinusAdd("minus", i)
                                         }
+                                        disabled={list[i].quantity === 0}
                                     >
                                         Remove
                                     </button>
