@@ -10,37 +10,40 @@ export const Item = () => {
     const [sum, setSum] = useState(0);
     const [empty, setEmpty] = useState(false);
     const [tmp, setTmp] = useState(dataList);
+    const [allItemNum, setAllItemNum] = useState(0);
 
     useEffect(() => {
-        setSum(() => JSON.parse(localStorage.getItem("total")));
+        setSum(() => JSON.parse(localStorage.getItem("total")).val);
         setTmp(() => dataList);
         if (empty) setList(() => []);
     }, [empty]);
 
     const handleLogic = useCallback((price, quantity, i) => {
         const itemTotal = price * quantity;
-        let val = i === 0 ? 0 : JSON.parse(localStorage.getItem("total"));
+        let val = i === 0 ? 0 : JSON.parse(localStorage.getItem("total")).val;
         val += itemTotal;
-        localStorage.setItem("total", JSON.stringify(val));
+        localStorage.setItem("total", JSON.stringify({ val }));
         return itemTotal;
     }, []);
 
     const removeItemHandler = (i) =>
         setList((current) => {
             const update = structuredClone(current);
+            const { val } = JSON.parse(localStorage.getItem("total"));
             const newTotal = +(
-                JSON.parse(localStorage.getItem("total")) -
+                val -
                 update[i].quantity * update[i].price
             ).toFixed(2);
 
             setSum(() => newTotal);
-            localStorage.setItem("total", JSON.stringify(newTotal));
+            localStorage.setItem("total", JSON.stringify({ val: newTotal }));
             for (let j = i; j < update.length; j++) {
                 update[j] = update[j + 1];
             }
             update.length = update.length - 1;
             return update;
         });
+
     const handleMinusAdd = (type, i) => {
         setList((current) => {
             const update = structuredClone(current);
@@ -54,7 +57,7 @@ export const Item = () => {
     const handleSave = () => {
         setList(() => list);
         setTmp(() => list);
-        setSum(() => JSON.parse(localStorage.getItem("total")));
+        setSum(() => JSON.parse(localStorage.getItem("total")).val);
     };
 
     const inputHandler = (event, i) => {
