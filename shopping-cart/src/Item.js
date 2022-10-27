@@ -1,99 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
+import React from "react";
+import { useDataLogic } from "./useDataLogic";
+import { useSeed } from "./useSeed";
+import { useStartUpLogic } from "./useStartUpLogic";
+// TODO
+// disable save if value is same
 
 export const Item = () => {
-    const defaultVal = useMemo(() => ({ priceTotal: 0, quantityTotal: 0 }), []);
-    const dataList = useMemo(
-        () => [
-            { name: "Egg", quantity: 1, price: 2.99 },
-            { name: "Milk", quantity: 2, price: 3.98 },
-            { name: "Cheese", quantity: 3, price: 3.99 },
-        ],
-        []
-    );
-    const [edit, setEdit] = useState(false);
-    const [list, setList] = useState(dataList);
-    const [empty, setEmpty] = useState(false);
-    const [tmp, setTmp] = useState(dataList);
-    const [allTotal, setAllTotal] = useState(defaultVal);
-    const [saveData, getData] = useLocalStorage();
-
-    useEffect(() => {
-        setAllTotal(() => getData("total", defaultVal));
-        setTmp(() => dataList);
-        if (empty) {
-            setList(() => []);
-            setAllTotal(() => defaultVal);
-            saveData("total", defaultVal);
-        }
-        console.log(getData("total"));
-    }, [empty, defaultVal, dataList, getData, saveData]);
-
-    const handleLogic = useCallback(
-        (price, quantity, i) => {
-            const itemTotal = price * quantity;
-            const { priceTotal, quantityTotal } = getData("total", defaultVal);
-
-            let newVal = i === 0 ? 0 : priceTotal;
-            let newItemNum = i === 0 ? 0 : quantityTotal;
-            newVal += itemTotal;
-            newItemNum += quantity;
-            saveData("total", {
-                priceTotal: +newVal.toFixed(2),
-                quantityTotal: newItemNum,
-            });
-            return itemTotal;
-        },
-        [defaultVal, getData, saveData]
-    );
-
-    const removeItemHandler = (i) =>
-        setList((current) => {
-            const update = structuredClone(current);
-            const { priceTotal, quantityTotal } = getData("total", defaultVal);
-            const newTotal = +(
-                priceTotal -
-                update[i].quantity * update[i].price
-            ).toFixed(2);
-            const newQuantity = +(quantityTotal - update[i].quantity).toFixed(
-                2
-            );
-
-            const newSums = {
-                priceTotal: +newTotal.toFixed(2),
-                quantityTotal: newQuantity,
-            };
-            setAllTotal(() => newSums);
-            saveData("total", newSums);
-            for (let j = i; j < update.length; j++) update[j] = update[j + 1];
-            update.length = update.length - 1;
-            return update;
-        });
-
-    const handleMinusAdd = (type, i) => {
-        setList((current) => {
-            const update = structuredClone(current);
-            type === "minus"
-                ? (update[i].quantity -= 1)
-                : (update[i].quantity += 1);
-            return update;
-        });
-    };
-
-    const handleSave = () => {
-        setList(() => list);
-        setTmp(() => list);
-        setAllTotal(() => getData("total"));
-    };
-
-    const inputHandler = (event, i) => {
-        const newVal = +event.target.value;
-        setList((current) => {
-            const update = structuredClone(current);
-            update[i].quantity = newVal;
-            return update;
-        });
-    };
+    const [list, allTotal, empty, edit, allFuncs] = useDataLogic();
+    const [defaultVal] = useSeed();
+    const [handleLogic] = useStartUpLogic();
 
     return (
         <div>
@@ -107,21 +22,22 @@ export const Item = () => {
                 <p>
                     <span>Number of items: </span>
                     <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                        {allTotal.quantityTotal}
+                        {allTotal?.quantityTotal}
                     </span>
                 </p>
                 <p>
                     <span>Total: </span>{" "}
                     <span style={{ fontWeight: "bold", fontSize: "20px" }}>
-                        ${allTotal.priceTotal.toFixed(2)}
+                        ${allTotal?.priceTotal.toFixed(2)}
                     </span>
                 </p>
-                <button onClick={() => setEmpty(true)} disabled={empty}>
+                <button onClick={allFuncs.emptyHandler} disabled={empty}>
                     Clear shopping cart
                 </button>
             </div>
             {list?.map(({ price, quantity, name }, i) => {
-                const itemTotal = handleLogic(price, quantity, i);
+                const args = { price, quantity, i, defaultVal };
+                const itemTotal = handleLogic(args);
 
                 return (
                     <div key={i + 1}>
@@ -131,7 +47,6 @@ export const Item = () => {
                             <span
                                 style={{ fontWeight: "bold", fontSize: "20px" }}
                             >
-                                {" "}
                                 ${itemTotal.toFixed(2)}
                             </span>
                         </p>
@@ -143,10 +58,14 @@ export const Item = () => {
                                     gap: "7px",
                                 }}
                             >
-                                <button onClick={() => setEdit(!edit)}>
+                                <button onClick={allFuncs.openEditor}>
                                     Change quantity
                                 </button>
-                                <button onClick={() => removeItemHandler(i)}>
+                                <button
+                                    onClick={() =>
+                                        allFuncs.removeItemHandler(i)
+                                    }
+                                >
                                     Remove
                                 </button>
                             </div>
@@ -162,17 +81,21 @@ export const Item = () => {
                                     type="number"
                                     name={name}
                                     value={list[i].quantity}
-                                    onChange={(e) => inputHandler(e, i)}
+                                    onChange={(e) =>
+                                        allFuncs.inputHandler(e, i)
+                                    }
                                 />
                                 <div>
                                     <button
-                                        onClick={() => handleMinusAdd("add", i)}
+                                        onClick={() =>
+                                            allFuncs.handleMinusAdd("add", i)
+                                        }
                                     >
                                         Add
                                     </button>
                                     <button
                                         onClick={() =>
-                                            handleMinusAdd("minus", i)
+                                            allFuncs.handleMinusAdd("minus", i)
                                         }
                                         disabled={list[i].quantity === 0}
                                     >
@@ -180,12 +103,17 @@ export const Item = () => {
                                     </button>
                                 </div>
                                 <div>
-                                    <button onClick={handleSave}>Save</button>
                                     <button
-                                        onClick={() => {
-                                            setEdit(!edit);
-                                            setList(() => tmp);
-                                        }}
+                                        onClick={() =>
+                                            allFuncs.handleSave("save")
+                                        }
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() =>
+                                            allFuncs.handleSave("cancel")
+                                        }
                                     >
                                         Cancel
                                     </button>
