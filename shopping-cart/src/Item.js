@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-// const dataList = ;
+import { useLocalStorage } from "./useLocalStorage";
+
 export const Item = () => {
     const defaultVal = useMemo(() => ({ priceTotal: 0, quantityTotal: 0 }), []);
     const dataList = useMemo(
@@ -15,40 +16,41 @@ export const Item = () => {
     const [empty, setEmpty] = useState(false);
     const [tmp, setTmp] = useState(dataList);
     const [allTotal, setAllTotal] = useState(defaultVal);
+    const [saveData, getData] = useLocalStorage();
 
     useEffect(() => {
-        setAllTotal(() => JSON.parse(localStorage.getItem("total")));
+        setAllTotal(() => getData("total", defaultVal));
         setTmp(() => dataList);
         if (empty) {
             setList(() => []);
             setAllTotal(() => defaultVal);
-            localStorage.setItem("total", JSON.stringify(defaultVal));
+            saveData("total", defaultVal);
         }
-    }, [empty, defaultVal, dataList]);
+        console.log(getData("total"));
+    }, [empty, defaultVal, dataList, getData, saveData]);
 
-    const handleLogic = useCallback((price, quantity, i) => {
-        const itemTotal = price * quantity;
-        const { priceTotal, quantityTotal } = JSON.parse(
-            localStorage.getItem("total")
-        );
+    const handleLogic = useCallback(
+        (price, quantity, i) => {
+            const itemTotal = price * quantity;
+            const { priceTotal, quantityTotal } = getData("total", defaultVal);
 
-        let newVal = i === 0 ? 0 : priceTotal;
-        let newItemNum = i === 0 ? 0 : quantityTotal;
-        newVal += itemTotal;
-        newItemNum += quantity;
-        localStorage.setItem(
-            "total",
-            JSON.stringify({ priceTotal: newVal, quantityTotal: newItemNum })
-        );
-        return itemTotal;
-    }, []);
+            let newVal = i === 0 ? 0 : priceTotal;
+            let newItemNum = i === 0 ? 0 : quantityTotal;
+            newVal += itemTotal;
+            newItemNum += quantity;
+            saveData("total", {
+                priceTotal: +newVal.toFixed(2),
+                quantityTotal: newItemNum,
+            });
+            return itemTotal;
+        },
+        [defaultVal, getData, saveData]
+    );
 
     const removeItemHandler = (i) =>
         setList((current) => {
             const update = structuredClone(current);
-            const { priceTotal, quantityTotal } = JSON.parse(
-                localStorage.getItem("total")
-            );
+            const { priceTotal, quantityTotal } = getData("total", defaultVal);
             const newTotal = +(
                 priceTotal -
                 update[i].quantity * update[i].price
@@ -58,11 +60,11 @@ export const Item = () => {
             );
 
             const newSums = {
-                priceTotal: newTotal,
+                priceTotal: +newTotal.toFixed(2),
                 quantityTotal: newQuantity,
             };
             setAllTotal(() => newSums);
-            localStorage.setItem("total", JSON.stringify(newSums));
+            saveData("total", newSums);
             for (let j = i; j < update.length; j++) update[j] = update[j + 1];
             update.length = update.length - 1;
             return update;
@@ -81,7 +83,7 @@ export const Item = () => {
     const handleSave = () => {
         setList(() => list);
         setTmp(() => list);
-        setAllTotal(() => JSON.parse(localStorage.getItem("total")));
+        setAllTotal(() => getData("total"));
     };
 
     const inputHandler = (event, i) => {
