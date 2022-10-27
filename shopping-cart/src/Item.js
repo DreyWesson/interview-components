@@ -81,9 +81,9 @@ export const Item = () => {
                                     type="number"
                                     name={name}
                                     value={list[i].quantity}
-                                    onChange={(e) =>
-                                        allFuncs.inputHandler(e, i)
-                                    }
+                                    onChange={(e) => {
+                                        allFuncs.inputHandler(e, i);
+                                    }}
                                 />
                                 <div>
                                     <button
@@ -105,7 +105,7 @@ export const Item = () => {
                                 <div>
                                     <button
                                         onClick={() =>
-                                            allFuncs.handleSave("save")
+                                            allFuncs.handleSave("save", i)
                                         }
                                     >
                                         Save

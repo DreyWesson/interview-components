@@ -54,17 +54,18 @@ export const useDataLogic = () => {
     }, []);
 
     const handleSave = useCallback(
-        (type) => {
+        (type, i) => {
             if (type === "save") {
                 setList(() => list);
                 setTmp(() => list);
                 setAllTotal(() => getData("total"));
+                if ((i ?? list[i].quantity) === 0) removeItemHandler(i);
             } else {
                 setEdit(!edit);
                 setList(() => tmp);
             }
         },
-        [list, tmp, edit, getData]
+        [list, tmp, edit, getData, removeItemHandler]
     );
 
     const inputHandler = useCallback((event, i) => {
