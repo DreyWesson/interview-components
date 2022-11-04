@@ -1,31 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 
 function App() {
     const { hours, minutes, seconds } = useMemo(
         () => ({
-            hours: 1,
+            hours: 0,
             minutes: 20,
             seconds: 40,
         }),
         []
     );
     const [stop, setStop] = useState(false);
-    const [[hrs, mins, secs], setTime] = useState([hours, minutes, seconds]);
-    function actions() {
-        return {
+    const [[hrs, mins, secs], setTime] = useState<number[]>([
+        hours,
+        minutes,
+        seconds,
+    ]);
+
+    const actions = useMemo(
+        () => ({
             resetTimer: () => setTime(() => [hours, minutes, seconds]),
             stopTimer: () => {
                 setStop(!stop);
                 setTime(() => [0, 0, 0]);
             },
             pauseTimer: () => (stop ? setStop(!stop) : setStop(!stop)),
-        };
-    }
-
-    const handleTimer = () => {
+        }),
+        [hours, minutes, seconds, stop]
+    );
+    const handleTimer = useCallback(() => {
         if (hrs === 0 && mins === 0 && secs === 0) {
-            actions().resetTimer();
+            actions.pauseTimer();
         } else if (mins === 0 && secs === 0) {
             setTime(() => [hrs - 1, 59, 59]);
         } else if (secs === 0) {
@@ -33,16 +38,34 @@ function App() {
         } else {
             setTime(() => [hrs, mins, secs - 1]);
         }
-    };
-    // Todo
-    // [✅] stop
-    // [✅] pause / Play
-    // [✅] reset
+    }, [actions, hrs, mins, secs]);
+
+    const customizedTime = useCallback(() => {
+        const t = prompt("Set time using this format hr:mm:ss?");
+        if (!t) return;
+        if (t[2] !== ":" && t[5] !== ":") {
+            const prompter = "This is not a valid time format. Use default?";
+            if (!window.confirm(prompter)) customizedTime();
+            return;
+        }
+
+        const newTime = t?.split(":");
+        const val = newTime?.reduce(
+            (prev: number[], curr: string): number[] => {
+                prev.push(+curr);
+                return prev;
+            },
+            []
+        );
+        setTime(() => (val?.length ? [...val] : [hours, minutes, seconds]));
+    }, [hours, minutes, seconds]);
+
+    useEffect(() => customizedTime(), [customizedTime]);
 
     useEffect(() => {
         const counter = stop ? "" : setInterval(() => handleTimer(), 1000);
         return () => clearInterval(counter);
-    });
+    }, [handleTimer, stop]);
     return (
         <div className="App">
             <div
@@ -55,15 +78,19 @@ function App() {
                     secs < 10 ? 0 : ""
                 }${secs}`}
             </div>
-            <button className="reset" onClick={actions().resetTimer}>
+            <button className="reset" onClick={actions.resetTimer}>
                 Reset
             </button>
-            <button className="stop" onClick={actions().stopTimer}>
+            <button
+                className="stop"
+                onClick={actions.stopTimer}
+                disabled={stop}
+            >
                 Stop
             </button>
             <button
                 className={stop ? "play" : "pause"}
-                onClick={actions().pauseTimer}
+                onClick={actions.pauseTimer}
             >
                 {stop ? "Play" : "Pause"}
             </button>
