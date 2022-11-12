@@ -5,7 +5,7 @@ export const Counter = () => {
     const { handleClick, style, winner, question, target, percentage } =
         useLogic();
     return (
-        <div className="App">
+        <div>
             {winner ? (
                 <div>Scored: {percentage}%</div>
             ) : (

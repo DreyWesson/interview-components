@@ -1,3 +1,4 @@
+import "./App.css";
 type ListProps = {
     details: {
         correct: number;
@@ -10,7 +11,9 @@ type ListProps = {
 export const List = ({
     details: { handleClick, optionNum, option, style },
 }: ListProps) => (
-    <li style={style} onClick={() => handleClick(optionNum)}>
-        {option}
-    </li>
+    <div className="list">
+        <li style={style} onClick={() => handleClick(optionNum)}>
+            {option}
+        </li>
+    </div>
 );

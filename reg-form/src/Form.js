@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { MultiCheckboxes } from "./MultiCheckboxes";
 const data = ["Cheese", "Bugger", "Pizza"];
 
@@ -6,6 +6,7 @@ export const Form = () => {
     const [checkedValues, setCheckedValues] = useState(
         new Array(data.length).fill(false)
     );
+
     const [formData, setFormData] = useState({
         fname: "",
         lname: "",
@@ -14,16 +15,18 @@ export const Form = () => {
         account: "",
         acceptance: "",
         "choose file": "",
-        checkboxes: new Array(3).fill(false),
+        checkboxes: new Array(data.length).fill(false),
         age: "",
         about: "",
         bio: "",
     });
+
     const handleCheckboxes = (position) => {
-        const updated = [...checkedValues];
+        const updated = structuredClone(checkedValues);
         updated[position] = !updated[position];
         setCheckedValues(updated);
     };
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (name === "checkbox") return;
@@ -33,18 +36,13 @@ export const Form = () => {
         }));
     };
 
-    const db = useMemo(() => {
-        const newVal = [];
-        checkedValues.forEach((val, i) => val && newVal.push(data[i]));
-        setFormData((prev) => ({ ...prev, checkboxes: newVal }));
-    }, [checkedValues]);
-
-    // useEffect(() => {
-    //     console.log(formData);
-    //     const newVal = [];
-    //     checkedValues.forEach((val, i) => val && newVal.push(data[i]));
-    //     setFormData((prev) => ({ ...prev, checkboxes: newVal }));
-    // }, [checkedValues]);
+    useEffect(
+        (newVal = []) => {
+            checkedValues.forEach((val, i) => val && newVal.push(data[i]));
+            setFormData((prev) => ({ ...prev, checkboxes: newVal }));
+        },
+        [checkedValues]
+    );
 
     return (
         <div
@@ -63,15 +61,9 @@ export const Form = () => {
             <form
                 action=""
                 style={{ marginTop: "50px" }}
-                // onChange={handleChange}
+                onChange={handleChange}
                 onSubmit={(e) => {
                     e.preventDefault();
-                    let formData = new FormData(e.target);
-                    // console.log(formData.getAll("checkbox"));
-                    formData = {
-                        ...Object.fromEntries(formData),
-                        checkbox: formData.getAll("checkbox"),
-                    };
                     console.log(formData);
                 }}
             >
