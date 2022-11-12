@@ -15,7 +15,7 @@ export const Form = () => {
         account: "",
         acceptance: "",
         "choose file": "",
-        checkboxes: new Array(data.length).fill(false),
+        checkboxes: [],
         age: "",
         about: "",
         bio: "",
@@ -113,13 +113,16 @@ export const Form = () => {
                 <label htmlFor="acceptance">
                     I accept the <a href="/">terms and conditions</a>{" "}
                 </label>
-                {/* checkboxes */}
-                <MultiCheckboxes
-                    data={data}
-                    checkedValues={checkedValues}
-                    handleCheckboxes={handleCheckboxes}
-                />
-                {/* checkboxes */}
+                {/* CHECKBOXES */}
+                {data.map((val, i) => (
+                    <MultiCheckboxes
+                        key={i}
+                        val={val}
+                        checkedValues={checkedValues[i]}
+                        handleCheckboxes={() => handleCheckboxes(i)}
+                    />
+                ))}
+                {/* CHECKBOXES ENDS */}
                 <hr />
                 <div
                     style={{
