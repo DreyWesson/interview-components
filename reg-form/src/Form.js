@@ -27,14 +27,15 @@ export const Form = () => {
         setCheckedValues(updated);
     };
 
-    const handleChange = (e) => {
-        const { name, value, files } = e.target;
+    const handleChange = ({ target }) => {
+        const { name, value, files } = target;
         if (name === "checkbox") return;
         setFormData((prev) => ({
             ...prev,
             [name.toLowerCase()]: name !== "Choose file" ? value : files[0],
         }));
     };
+    console.log(formData);
 
     useEffect(
         (newVal = []) => {
@@ -85,24 +86,28 @@ export const Form = () => {
                 </div>
                 <hr />
                 <div className="">
-                    <input
-                        type="radio"
-                        name="account"
-                        id="personal"
-                        value="personal"
-                        style={{ margin: "10px" }}
-                    />
-                    <label htmlFor="personal">Personal Account</label>
+                    <label htmlFor="personal">
+                        <input
+                            type="radio"
+                            name="account"
+                            id="personal"
+                            value="personal"
+                            style={{ margin: "10px" }}
+                        />
+                        Personal Account
+                    </label>
                 </div>
                 <div className="">
-                    <input
-                        type="radio"
-                        name="account"
-                        value={"business"}
-                        id="business"
-                        style={{ margin: "10px" }}
-                    />
-                    <label htmlFor="business">Business Account</label>
+                    <label htmlFor="business">
+                        <input
+                            type="radio"
+                            name="account"
+                            value={"business"}
+                            id="business"
+                            style={{ margin: "10px" }}
+                        />
+                        Business Account
+                    </label>
                 </div>
                 <input
                     type="checkbox"
@@ -138,7 +143,7 @@ export const Form = () => {
                         onChange={(e) => console.log(e.target.value)}
                     />
                     <label htmlFor="age">Input your age (years):</label>
-                    <input type="number" name="age" />
+                    <input type="number" name="age" min={0} />
 
                     <label htmlFor="about">How did you hear about us?</label>
                     <select name="about">

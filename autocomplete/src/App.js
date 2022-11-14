@@ -7,15 +7,20 @@ function App() {
     const [filteredList, setFilteredList] = useState([]);
 
     useEffect(() => {
-        async function getData() {
-            const res = await fetch(
-                "https://jsonplaceholder.typicode.com/users"
-            );
-            let data = await res.json();
-            setData(data);
-        }
-        getData();
+        (async () => {
+            try {
+                const url = "https://jsonplaceholder.typicode.com/users";
+                const res = await fetch(url);
+                if (!res.ok) throw Error(`${url} responded with ${res.status}`);
+                setData(await res.json());
+            } catch (error) {
+                console.log(error);
+            }
+        })();
     }, []);
+    useEffect(() => {
+        if (word === "") setFilteredList(() => data);
+    }, [word, data]);
 
     const handleChange = (e) => {
         const value = e.target.value.toLowerCase();
@@ -25,17 +30,17 @@ function App() {
         setWord(() => value);
         setFilteredList(() => list);
     };
-
     return (
         <>
             <form className="App" onSubmit={handleChange}>
-                <label htmlFor="search-bar"></label>
-                <input
-                    name="search-bar"
-                    placeholder="Search"
-                    onChange={handleChange}
-                    value={word}
-                />
+                <label htmlFor="search-bar">
+                    <input
+                        name="search-bar"
+                        placeholder="Search"
+                        onChange={handleChange}
+                        value={word}
+                    />
+                </label>
             </form>
             {filteredList?.length > 0 &&
                 filteredList.map((user) => (

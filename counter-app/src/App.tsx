@@ -10,12 +10,12 @@ function App() {
         }),
         []
     );
-    const [stop, setStop] = useState(false);
     const [[hrs, mins, secs], setTime] = useState<number[]>([
         hours,
         minutes,
         seconds,
     ]);
+    const [stop, setStop] = useState(false);
 
     const actions = useMemo(
         () => ({
@@ -57,7 +57,7 @@ function App() {
             },
             []
         );
-        setTime(() => (val?.length ? [...val] : [hours, minutes, seconds]));
+        setTime(() => (val?.length ? val : [hours, minutes, seconds]));
     }, [hours, minutes, seconds]);
 
     useEffect(() => customizedTime(), [customizedTime]);
@@ -66,6 +66,7 @@ function App() {
         const counter = stop ? "" : setInterval(() => handleTimer(), 1000);
         return () => clearInterval(counter);
     }, [handleTimer, stop]);
+
     return (
         <div className="App">
             <div
