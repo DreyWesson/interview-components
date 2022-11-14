@@ -6,25 +6,29 @@ import { useData } from "./useData";
 import { usePageSwitcher } from "./usePageSwitcher";
 
 const App = () => {
-  const { data, handleSubmit } = useData();
-  const { page, pageHandler, id, handleNoteDisplay } = usePageSwitcher();
+    const { data, handleSubmit } = useData();
+    const { page, pageHandler, id, handleNoteDisplay } = usePageSwitcher();
 
-  return (
-    <div className="container" style={{ width: "80%", margin: "0 auto" }}>
-      <h1>Note App</h1>
-      <div style={{ display: "flex" }}>
-        <ListNote
-          lists={data}
-          pageHandler={pageHandler}
-          page={page}
-          handleNoteDisplay={handleNoteDisplay}
-        />
-        <div style={{ flexGrow: "1", flex: "1" }}>
-          {page ? <OpenNote note={id} /> : <Form handleSubmit={handleSubmit} />}
+    return (
+        <div className="container" style={{ width: "80%", margin: "0 auto" }}>
+            <h1>Note App</h1>
+            <div style={{ display: "flex" }}>
+                <ListNote
+                    lists={data}
+                    pageHandler={pageHandler}
+                    page={page}
+                    handleNoteDisplay={handleNoteDisplay}
+                />
+                <div style={{ flexGrow: "1", flex: "1" }}>
+                    {page ? (
+                        <OpenNote note={id} />
+                    ) : (
+                        <Form handleSubmit={handleSubmit} />
+                    )}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default App;

@@ -29,15 +29,10 @@ function App() {
         [hours, minutes, seconds, stop]
     );
     const handleTimer = useCallback(() => {
-        if (hrs === 0 && mins === 0 && secs === 0) {
-            actions.pauseTimer();
-        } else if (mins === 0 && secs === 0) {
-            setTime(() => [hrs - 1, 59, 59]);
-        } else if (secs === 0) {
-            setTime(() => [hrs, mins - 1, 59]);
-        } else {
-            setTime(() => [hrs, mins, secs - 1]);
-        }
+        if (hrs === 0 && mins === 0 && secs === 0) actions.pauseTimer();
+        else if (mins === 0 && secs === 0) setTime(() => [hrs - 1, 59, 59]);
+        else if (secs === 0) setTime(() => [hrs, mins - 1, 59]);
+        else setTime(() => [hrs, mins, secs - 1]);
     }, [actions, hrs, mins, secs]);
 
     const customizedTime = useCallback(() => {
