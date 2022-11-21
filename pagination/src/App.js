@@ -55,23 +55,9 @@ const App = () => {
 
     return (
         <div>
-            <div
-                className="container"
-                style={{
-                    width: "50%",
-                    margin: "0 auto",
-                    pointerEvents: openModal ? "none" : "auto",
-                }}
-            >
+            <div className="container">
                 <header>
-                    <ul
-                        style={{
-                            display: "flex",
-                            gap: "15px",
-                            listStyle: "none",
-                            padding: 0,
-                        }}
-                    >
+                    <ul className="nav">
                         <li>
                             <a href="/">Home</a>{" "}
                         </li>
@@ -230,6 +216,21 @@ const App = () => {
                     dolorum.
                 </div>
             </Modal>
+            <div className="">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Reiciendis possimus inventore ipsa veniam sapiente laudantium,
+                incidunt pariatur commodi voluptatum deleniti saepe sint
+                doloribus fugiat vero? Laboriosam inventore veniam enim natus
+                quam modi itaque soluta eius eaque in quaerat nam voluptas,
+                culpa illo iusto at quasi. Corrupti laborum, adipisci hic
+                doloremque nesciunt omnis ullam. Qui, temporibus odio tempore
+                eum dolorem quasi alias pariatur totam voluptas atque
+                praesentium consectetur exercitationem nulla optio hic dicta nam
+                repellendus ad! Quia ipsa porro et distinctio delectus, eaque
+                voluptatibus, atque vel autem repudiandae minima assumenda iste,
+                libero molestiae praesentium sequi pariatur culpa saepe eveniet
+                qui obcaecati?
+            </div>
         </div>
     );
 };
