@@ -22,13 +22,21 @@ const App = () => {
     useEffect(() => {
         const controller = new AbortController();
         (async () => {
-            const res = await fetch(
-                "https://jsonplaceholder.typicode.com/postsjjj",
-                { signal: AbortController.signal }
-            );
-            const data = await res.json();
-            console.log(data);
-            setData(() => []);
+            try {
+                const res = await fetch(
+                    "https://jsonplaceholder.typicode.com/postsjjj",
+                    { signal: AbortController.signal }
+                );
+                if (!res.ok)
+                    throw Error(
+                        `${res.status}: There is an error fetching this data`
+                    );
+
+                const data = await res.json();
+                setData(() => (JSON.stringify(data) !== "{}" ? data : []));
+            } catch (error) {
+                console.error(error);
+            }
         })();
         return () => {
             controller.abort();

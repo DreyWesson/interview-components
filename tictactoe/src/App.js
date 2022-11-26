@@ -10,33 +10,18 @@ const App = () => {
             {winner && <h2>{`Player ${winner} wins`}</h2>}
             <table style={{ width: "50%", margin: "0 auto" }}>
                 <tbody>
-                    <tr>
-                        {[...new Array(3).fill("")].map((a, i) => (
-                            <Cell key={i} handlePlayer={() => handlePlayer(i)}>
-                                {cells[i]}
-                            </Cell>
-                        ))}
-                    </tr>
-                    <tr>
-                        {[...new Array(3).fill("")].map((a, i) => (
-                            <Cell
-                                key={i + 3}
-                                handlePlayer={() => handlePlayer(i + 3)}
-                            >
-                                {cells[i + 3]}
-                            </Cell>
-                        ))}
-                    </tr>
-                    <tr>
-                        {[...new Array(3).fill("")].map((a, i) => (
-                            <Cell
-                                key={i + 6}
-                                handlePlayer={() => handlePlayer(i + 6)}
-                            >
-                                {cells[i + 6]}
-                            </Cell>
-                        ))}
-                    </tr>
+                    {["", "", ""].map((el, j) => (
+                        <tr key={Number(Math.random()).toString(16)}>
+                            {[...new Array(3).fill("")].map((a, i) => (
+                                <Cell
+                                    key={Number(Math.random()).toString(32)}
+                                    handlePlayer={() => handlePlayer(i)}
+                                >
+                                    {cells[(i += j > 0 ? j * 3 : j)]}
+                                </Cell>
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
             <button onClick={() => handleRestart()}>restart</button>

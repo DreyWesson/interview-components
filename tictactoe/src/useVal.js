@@ -17,7 +17,6 @@ export const useVal = () => {
 
     const getWinner = (squares) => {
         winComb.forEach((comb) => {
-            console.log(squares[comb[0]], comb[0]);
             if (
                 squares[comb[0]] !== "" &&
                 squares[comb[0]] === squares[comb[1]] &&
@@ -30,6 +29,7 @@ export const useVal = () => {
     };
 
     const handlePlayer = (num) => {
+        console.log(num);
         if (cells[num] !== "") return alert("This move is not allowed!");
         if (winner) {
             const reply = window.confirm(
