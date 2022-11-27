@@ -1,5 +1,5 @@
 import React from "react";
-import { Wrapper } from "./Wrapper";
+import { withWrapper } from "./Wrapper";
 
 const UsersList = ({ data }) => {
     return (
@@ -10,4 +10,4 @@ const UsersList = ({ data }) => {
         </div>
     );
 };
-export const WrappedUser = Wrapper(UsersList, "users");
+export const WrappedUser = withWrapper(UsersList, "users");

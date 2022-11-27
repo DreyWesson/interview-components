@@ -1,5 +1,5 @@
 import React from "react";
-import { Wrapper } from "./Wrapper";
+import { withWrapper } from "./Wrapper";
 
 const TodoList = ({ data }) => {
     return (
@@ -12,4 +12,4 @@ const TodoList = ({ data }) => {
         </div>
     );
 };
-export const WrappedTodo = Wrapper(TodoList, "todos");
+export const WrappedTodo = withWrapper(TodoList, "todos");
