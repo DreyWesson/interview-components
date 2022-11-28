@@ -2,11 +2,11 @@ import React from "react";
 import { withAdd } from "./withAdd";
 
 export const Add = ({ a, b }) => {
-    a += 1;
-    b += 1;
+    const newA = a + 1;
+    const newB = b + 1;
     return (
         <div>
-            {a} + {b} = {a + b}
+            {newA} + {newB} = {newA + newB}
         </div>
     );
 };
