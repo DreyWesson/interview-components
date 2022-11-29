@@ -24,7 +24,7 @@ const App = () => {
         (async () => {
             try {
                 const res = await fetch(
-                    "https://jsonplaceholder.typicode.com/postsjjj",
+                    "https://jsonplaceholder.typicode.com/posts",
                     { signal: AbortController.signal }
                 );
                 if (!res.ok)
@@ -33,6 +33,8 @@ const App = () => {
                     );
 
                 const data = await res.json();
+                data.splice(92);
+                console.log(data);
                 setData(() => (JSON.stringify(data) !== "{}" ? data : []));
             } catch (error) {
                 console.error(error);
@@ -44,11 +46,9 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        const allSeen = currentPage * numPerPage;
-        const current = allSeen - numPerPage;
-
-        setPage(() => data.slice(current, allSeen));
-    }, [currentPage, data, numPerPage]);
+        let slice = currentPage * numPerPage;
+        setPage(() => data.slice(slice - numPerPage, slice));
+    }, [data, numPerPage, currentPage]);
 
     const style = (idx) => ({
         border: "1px solid black",
@@ -88,7 +88,7 @@ const App = () => {
                         <div className="">{d.body}</div>
                     </div>
                 ))}
-                <p>
+                {/* <p>
                     Lorem ipsum dolor, sit amet consectetur adipisicing elit.
                     Eius sunt repudiandae a esse maxime nostrum omnis ipsam
                     voluptas rerum, nulla pariatur officia impedit iure odio
@@ -200,7 +200,7 @@ const App = () => {
                     id! Laboriosam obcaecati numquam tenetur! Molestias
                     laudantium praesentium velit suscipit distinctio hic
                     sapiente quod sequi veritatis. Nesciunt, fugit enim!
-                </p>
+                </p>*/}
                 <ul className="apiContents">
                     {[...new Array(split)].map((li, idx) => (
                         <li
