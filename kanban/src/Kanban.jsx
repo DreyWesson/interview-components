@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { withKanban } from "./withKanban";
 
-const Kanban = ({ kanban, dragZone, formData, boardData, color }) => {
+const Kanban = ({ kanban, dragZone, formData, boardData, color, greet }) => {
+    const inputRef = useRef(null);
+    useEffect(() => inputRef.current.focus(), []);
+
     return (
         <div className="container">
             <div className="" style={{ width: "100%" }}>
@@ -36,6 +39,7 @@ const Kanban = ({ kanban, dragZone, formData, boardData, color }) => {
                         <input
                             type="text"
                             name="newTask"
+                            ref={inputRef}
                             style={{
                                 flex: 1,
                                 padding: "5px",

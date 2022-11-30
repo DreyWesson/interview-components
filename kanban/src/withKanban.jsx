@@ -55,6 +55,7 @@ export const withKanban = (WrappedComponent) => () => {
             dragZone.initIndex = index;
         },
     };
+
     return (
         <WrappedComponent
             kanban={kanban}
