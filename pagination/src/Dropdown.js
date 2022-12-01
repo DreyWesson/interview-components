@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Dropdown = ({ name, items }) => {
+export const Dropdown = ({ items }) => {
     return (
         <button className="dropdown-container">
             Services
