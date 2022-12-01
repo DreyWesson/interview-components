@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useDebounce } from "./useDebounce";
 
 export const withKanban = (WrappedComponent) => () => {
     const phases = ["Test", "Development", "Production", "Completion"];
@@ -56,6 +57,8 @@ export const withKanban = (WrappedComponent) => () => {
         },
     };
 
+    const inputRef = useRef(null);
+    useEffect(() => inputRef.current.focus(), []);
     return (
         <WrappedComponent
             kanban={kanban}
@@ -63,6 +66,7 @@ export const withKanban = (WrappedComponent) => () => {
             formData={formData}
             boardData={boardData}
             color={color}
+            inputRef={inputRef}
         />
     );
 };

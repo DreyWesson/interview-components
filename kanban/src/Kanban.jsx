@@ -1,10 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { withKanban } from "./withKanban";
 
-const Kanban = ({ kanban, dragZone, formData, boardData, color, greet }) => {
-    const inputRef = useRef(null);
-    useEffect(() => inputRef.current.focus(), []);
-
+const Kanban = ({ kanban, dragZone, formData, boardData, color, inputRef }) => {
     return (
         <div className="container">
             <div className="" style={{ width: "100%" }}>
@@ -81,7 +78,6 @@ const Kanban = ({ kanban, dragZone, formData, boardData, color, greet }) => {
                         <div
                             key={Number(Math.random()).toString(16)}
                             className="kanban-phases"
-                            // onDragEnd={kanban.handleDrag}
                             onDragEnter={() => (dragZone.phaseDest = stage)}
                         >
                             <div

@@ -2,17 +2,24 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Dropdown } from "./Dropdown";
 import "./index.css";
 import { Modal } from "./Modal";
+import { useQuery } from "react-query";
 
 const App = () => {
-    const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [numPerPage] = useState(10);
     const [openModal, setOpenModal] = useState(false);
 
     const [page, setPage] = useState([]);
+
+    const { data, isLoading, error, isError } = useQuery(["data"], async () => {
+        return await (
+            await fetch("https://jsonplaceholder.typicode.com/posts")
+        ).json();
+    });
+
     const split = useMemo(
-        () => Math.ceil(data.length / numPerPage),
-        [data.length, numPerPage]
+        () => Math.ceil(data?.length / numPerPage) ?? 0,
+        [data?.length, numPerPage]
     );
     const items = useMemo(
         () => ["Frontend", "Backend", "Fullstack", "DevOps"],
@@ -20,34 +27,8 @@ const App = () => {
     );
 
     useEffect(() => {
-        const controller = new AbortController();
-        (async () => {
-            try {
-                const res = await fetch(
-                    "https://jsonplaceholder.typicode.com/posts",
-                    { signal: AbortController.signal }
-                );
-                if (!res.ok)
-                    throw Error(
-                        `${res.status}: There is an error fetching this data`
-                    );
-
-                const data = await res.json();
-                data.splice(92);
-                console.log(data);
-                setData(() => (JSON.stringify(data) !== "{}" ? data : []));
-            } catch (error) {
-                console.error(error);
-            }
-        })();
-        return () => {
-            controller.abort();
-        };
-    }, []);
-
-    useEffect(() => {
         let slice = currentPage * numPerPage;
-        setPage(() => data.slice(slice - numPerPage, slice));
+        data?.length && setPage(() => data?.slice(slice - numPerPage, slice));
     }, [data, numPerPage, currentPage]);
 
     const style = (idx) => ({
@@ -60,6 +41,8 @@ const App = () => {
         if (e.target !== e.currentTarget) return;
         setOpenModal(!openModal);
     };
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error! {error.message}</div>;
 
     return (
         <div>
@@ -202,18 +185,19 @@ const App = () => {
                     sapiente quod sequi veritatis. Nesciunt, fugit enim!
                 </p>*/}
                 <ul className="apiContents">
-                    {[...new Array(split)].map((li, idx) => (
-                        <li
-                            style={style(idx + 1)}
-                            key={idx}
-                            onClick={() =>
-                                idx + 1 !== currentPage &&
-                                setCurrentPage(idx + 1)
-                            }
-                        >
-                            {idx + 1}
-                        </li>
-                    ))}
+                    {data.length &&
+                        [...new Array(split)].map((li, idx) => (
+                            <li
+                                style={style(idx + 1)}
+                                key={idx}
+                                onClick={() =>
+                                    idx + 1 !== currentPage &&
+                                    setCurrentPage(idx + 1)
+                                }
+                            >
+                                {idx + 1}
+                            </li>
+                        ))}
                 </ul>
             </div>
             <Modal openModal={openModal} handleClick={handleClick}>
