@@ -9,7 +9,7 @@ export const Pagination = () => {
         isError,
         error,
         page,
-        data,
+
         split,
         style,
         currentPage,
@@ -18,7 +18,6 @@ export const Pagination = () => {
 
     if (isLoading) return <div>Loading...</div>;
     if (isError) return <div>Error! {error.message}</div>;
-
     return (
         <div>
             <div className="container">
@@ -147,7 +146,7 @@ export const Pagination = () => {
                     sapiente quod sequi veritatis. Nesciunt, fugit enim!
                 </p>*/}
                 <ul className="apiContents">
-                    {data.length &&
+                    {page.length > 0 &&
                         [...new Array(split)].map((li, idx) => (
                             <li
                                 style={style(idx + 1)}

@@ -1,50 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer } from "react";
+import { actionTypes, formReducer, initialState } from "./formReducer";
 import { MultiCheckboxes } from "./MultiCheckboxes";
-const data = ["Cheese", "Bugger", "Pizza"];
+const checkboxes = { Cheese: false, Bugger: false, Pizza: false };
 
 export const Form = () => {
-    const [checkedValues, setCheckedValues] = useState(
-        new Array(data.length).fill(false)
-    );
+    const [formData, dispatch] = useReducer(formReducer, initialState);
 
-    const [formData, setFormData] = useState({
-        fname: "",
-        lname: "",
-        email: "",
-        password: "",
-        account: "",
-        acceptance: "",
-        "choose file": "",
-        checkboxes: [],
-        age: "",
-        about: "",
-        bio: "",
-    });
-
-    const handleCheckboxes = (position) => {
-        const updated = structuredClone(checkedValues);
-        updated[position] = !updated[position];
-        setCheckedValues(updated);
+    const handleCheckboxes = (prop) => {
+        const value = Object.keys(checkboxes).reduce((list, curr) => {
+            if (prop === curr) checkboxes[curr] = !checkboxes[curr];
+            if (checkboxes[curr]) list.push(curr);
+            return list;
+        }, []);
+        dispatch({
+            type: actionTypes.FIELD,
+            payload: { name: "checkboxes", value },
+        });
     };
 
     const handleChange = ({ target }) => {
         const { name, value, files } = target;
         if (name === "checkbox") return;
-        setFormData((prev) => ({
-            ...prev,
-            [name.toLowerCase()]: name !== "Choose file" ? value : files[0],
-        }));
+        dispatch({
+            type: actionTypes.FIELD,
+            payload: {
+                name,
+                value: name !== "Choose file" ? value : files[0],
+            },
+        });
     };
     console.log(formData);
-
-    useEffect(
-        (newVal = []) => {
-            checkedValues.forEach((val, i) => val && newVal.push(data[i]));
-            setFormData((prev) => ({ ...prev, checkboxes: newVal }));
-        },
-        [checkedValues]
-    );
-
     return (
         <div
             style={{
@@ -76,7 +61,16 @@ export const Form = () => {
                     }}
                 >
                     <label htmlFor="fname">Enter Your First Name:</label>
-                    <input type="text" name="fname" />
+                    <input
+                        type="text"
+                        name="fname"
+                        onBlur={(e) => {
+                            console.log(formData.fname);
+                        }}
+                    />
+                    <i style={{ fontSize: "14px", color: "red" }}>
+                        Invalid first name
+                    </i>
                     <label htmlFor="lname">Enter Your Last Name:</label>
                     <input type="text" name="lname" />
                     <label htmlFor="email">Enter Your Email:</label>
@@ -119,12 +113,12 @@ export const Form = () => {
                     I accept the <a href="/">terms and conditions</a>{" "}
                 </label>
                 {/* CHECKBOXES */}
-                {data.map((val, i) => (
+                {Object.keys(checkboxes).map((val) => (
                     <MultiCheckboxes
-                        key={i}
+                        key={Number(Math.random()).toString(16)}
                         val={val}
-                        checkedValues={checkedValues[i]}
-                        handleCheckboxes={() => handleCheckboxes(i)}
+                        checkedValues={checkboxes[val]}
+                        handleCheckboxes={() => handleCheckboxes(val)}
                     />
                 ))}
                 {/* CHECKBOXES ENDS */}

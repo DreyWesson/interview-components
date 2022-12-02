@@ -11,7 +11,7 @@ export const useLogic = () => {
 
     const { data, isLoading, error, isError } = useQuery(["data"], async () => {
         return await (
-            await fetch("https://jsonplaceholder.typicode.com/postsaaa")
+            await fetch("https://jsonplaceholder.typicode.com/posts")
         ).json();
     });
     const [, dispatch] = useStateValue();

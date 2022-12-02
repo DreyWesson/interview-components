@@ -9,8 +9,6 @@ import { useLogic } from "./useLogic";
 const App = () => {
     const { items, handleClick } = useLogic();
 
-    // const [, dispatch] = useStateValue();
-
     return (
         <>
             <header>
