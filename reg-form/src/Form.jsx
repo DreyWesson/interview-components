@@ -1,19 +1,18 @@
 import React, { useReducer } from "react";
 import { actionTypes, formReducer, initialState } from "./formReducer";
 import { MultiCheckboxes } from "./MultiCheckboxes";
-const checkboxes = { Cheese: false, Bugger: false, Pizza: false };
 
 export const Form = () => {
     const [formData, dispatch] = useReducer(formReducer, initialState);
-
+    const { checkboxes } = formData;
     const handleCheckboxes = (prop) => {
         const value = Object.keys(checkboxes).reduce((list, curr) => {
             if (prop === curr) checkboxes[curr] = !checkboxes[curr];
-            if (checkboxes[curr]) list.push(curr);
+            list[curr] = checkboxes[curr];
             return list;
-        }, []);
+        }, {});
         dispatch({
-            type: actionTypes.FIELD,
+            type: actionTypes.CHECKBOXES,
             payload: { name: "checkboxes", value },
         });
     };
@@ -29,7 +28,20 @@ export const Form = () => {
             },
         });
     };
-    console.log(formData);
+
+    const handleBlur = (e) => {
+        dispatch({
+            type: actionTypes.CHECK_VALIDITY,
+            payload: {
+                name: "fname",
+                value: {
+                    dirty: true,
+                    value: e.target.value,
+                },
+            },
+        });
+    };
+
     return (
         <div
             style={{
@@ -50,7 +62,9 @@ export const Form = () => {
                 onChange={handleChange}
                 onSubmit={(e) => {
                     e.preventDefault();
-                    console.log(formData);
+                    // console.log(formData);
+                    const fD = new FormData(e.target);
+                    console.log(Object.fromEntries(fD));
                 }}
             >
                 <div
@@ -61,16 +75,12 @@ export const Form = () => {
                     }}
                 >
                     <label htmlFor="fname">Enter Your First Name:</label>
-                    <input
-                        type="text"
-                        name="fname"
-                        onBlur={(e) => {
-                            console.log(formData.fname);
-                        }}
-                    />
-                    <i style={{ fontSize: "14px", color: "red" }}>
-                        Invalid first name
-                    </i>
+                    <input type="text" name="fname" onBlur={handleBlur} />
+                    {formData.fname.dirty && !formData.fname.validity ? (
+                        <i style={{ fontSize: "14px", color: "red" }}>
+                            Invalid first name
+                        </i>
+                    ) : null}
                     <label htmlFor="lname">Enter Your Last Name:</label>
                     <input type="text" name="lname" />
                     <label htmlFor="email">Enter Your Email:</label>
@@ -113,11 +123,11 @@ export const Form = () => {
                     I accept the <a href="/">terms and conditions</a>{" "}
                 </label>
                 {/* CHECKBOXES */}
-                {Object.keys(checkboxes).map((val) => (
+                {Object.keys(formData.checkboxes).map((val) => (
                     <MultiCheckboxes
                         key={Number(Math.random()).toString(16)}
                         val={val}
-                        checkedValues={checkboxes[val]}
+                        checkedValues={formData.checkboxes[val]}
                         handleCheckboxes={() => handleCheckboxes(val)}
                     />
                 ))}
