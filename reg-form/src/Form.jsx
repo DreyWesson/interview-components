@@ -3,7 +3,11 @@ import { actionTypes, formReducer, initialState } from "./formReducer";
 import { MultiCheckboxes } from "./MultiCheckboxes";
 
 export const Form = () => {
-    const [formData, dispatch] = useReducer(formReducer, initialState);
+    // const [formData, dispatch] = useReducer(formReducer, initialState);
+    const [formData, dispatch] = useReducer(
+        (currVal, newVal) => ({ ...currVal, newVal }),
+        initialState
+    );
     const { checkboxes } = formData;
     const handleCheckboxes = (prop) => {
         const value = Object.keys(checkboxes).reduce((list, curr) => {

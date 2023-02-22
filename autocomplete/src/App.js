@@ -1,35 +1,31 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
     const [word, setWord] = useState("");
     const [data, setData] = useState([]);
-    const [filteredList, setFilteredList] = useState([]);
 
+    const handleChange = (e) => {
+        const value = e.target.value.toLowerCase();
+        setWord(() => value);
+    };
+    const filteredList = data?.filter(
+        (list) => list?.name.toLowerCase().startsWith(word) && list
+    );
     useEffect(() => {
+        const controller = new AbortController();
         (async () => {
             try {
                 const url = "https://jsonplaceholder.typicode.com/users";
-                const res = await fetch(url);
+                const res = await fetch(url, { signal: controller.signal });
                 if (!res.ok) throw Error(`${url} responded with ${res.status}`);
                 setData(await res.json());
             } catch (error) {
                 console.log(error);
             }
         })();
+        return () => controller.abort();
     }, []);
-    useEffect(() => {
-        if (word === "") setFilteredList(() => data);
-    }, [word, data]);
-
-    const handleChange = (e) => {
-        const value = e.target.value.toLowerCase();
-        const list = data?.filter(
-            (list) => list?.name.toLowerCase().startsWith(value) && list
-        );
-        setWord(() => value);
-        setFilteredList(() => list);
-    };
     return (
         <>
             <form className="App" onSubmit={handleChange}>
