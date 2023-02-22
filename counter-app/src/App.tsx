@@ -9,14 +9,13 @@ function App() {
             seconds: 40,
         }),
         []
-    );
+    ); // DEFAULT
     const [[hrs, mins, secs], setTime] = useState<number[]>([
         hours,
         minutes,
         seconds,
-    ]);
+    ]); // DISPLAY
     const [stop, setStop] = useState(false);
-
     const actions = useMemo(
         () => ({
             resetTimer: () => setTime(() => [hours, minutes, seconds]),
@@ -24,18 +23,18 @@ function App() {
                 setStop(!stop);
                 setTime(() => [0, 0, 0]);
             },
-            pauseTimer: () => (stop ? setStop(!stop) : setStop(!stop)),
+            pauseTimer: () => setStop(!stop),
         }),
         [hours, minutes, seconds, stop]
-    );
+    ); // CLOCK ACTIONS - reset, stop, pause
     const handleTimer = useCallback(() => {
-        if (hrs === 0 && mins === 0 && secs === 0) actions.pauseTimer();
+        if (hrs === 0 && mins === 0 && secs === 0) actions.stopTimer();
         else if (mins === 0 && secs === 0) setTime(() => [hrs - 1, 59, 59]);
         else if (secs === 0) setTime(() => [hrs, mins - 1, 59]);
         else setTime(() => [hrs, mins, secs - 1]);
-    }, [actions, hrs, mins, secs]);
+    }, [actions, hrs, mins, secs]); // handle 59 -> 00 transition for hr, min and sec
 
-    const customizedTime = useCallback(() => {
+    const customizedTime = useCallback<any>(() => {
         const t = prompt("Set time using this format hr:mm:ss?");
         if (!t) return;
         if (t[2] !== ":" && t[5] !== ":") {
@@ -43,7 +42,6 @@ function App() {
             if (!window.confirm(prompter)) customizedTime();
             return;
         }
-
         const newTime = t?.split(":");
         const val = newTime?.reduce(
             (prev: number[], curr: string): number[] => {
@@ -60,7 +58,7 @@ function App() {
     useEffect(() => {
         const counter = stop ? "" : setInterval(() => handleTimer(), 1000);
         return () => clearInterval(counter);
-    }, [handleTimer, stop]);
+    }, [handleTimer, stop]); // handle ticking
 
     return (
         <div className="App">

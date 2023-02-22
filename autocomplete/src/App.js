@@ -4,7 +4,6 @@ import "./App.css";
 function App() {
     const [word, setWord] = useState("");
     const [data, setData] = useState([]);
-
     const handleChange = (e) => {
         const value = e.target.value.toLowerCase();
         setWord(() => value);
@@ -12,6 +11,7 @@ function App() {
     const filteredList = data?.filter(
         (list) => list?.name.toLowerCase().startsWith(word) && list
     );
+
     useEffect(() => {
         const controller = new AbortController();
         (async () => {
